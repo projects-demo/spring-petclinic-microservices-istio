@@ -1,59 +1,141 @@
 ##################################################################################################
-# Productpage services
+
+# Main  service receiving response from ingress
+
 ##################################################################################################
+
 apiVersion: v1
+
 kind: Service
+
 metadata:
-  name: productpage
+
+  name: customers-service
+
   labels:
-    app: productpage
-    service: productpage
+
+    app: customers-service
+
 spec:
+
   ports:
-  - port: 9080
+
+  - port: 8080
+
     name: http
+
   selector:
-    app: productpage
+
+    app: customers-service
+
 ---
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: bookinfo-productpage
-  labels:
-    account: productpage
----
-apiVersion: apps/v1
+
+apiVersion: extensions/v1beta1
+
 kind: Deployment
+
 metadata:
-  name: productpage-v1
-  labels:
-    app: productpage
-    version: v1
+
+  name: customers-service-deployment-v1
+
 spec:
+
   replicas: 1
-  selector:
-    matchLabels:
-      app: productpage
-      version: v1
-  template:
+
+  template: # template for the pods
+
     metadata:
+
       labels:
-        app: productpage
+
+        app: customers-service
+
         version: v1
+
     spec:
-      serviceAccountName: bookinfo-productpage
+
       containers:
-      - name: productpage
-        #image: docker.io/saurabh2204/spring-petclinic-customers-service-istio:latest
-        #image: docker.io/istio/examples-bookinfo-productpage-v1:1.16.1
-        image: docker.io/pmusale/istiocanary:1.0
-        imagePullPolicy: IfNotPresent
+
+      - name: customers-service
+
+        image: saurabh2204/spring-petclinic-customers-service-istio:latest
+
+        imagePullPolicy: Always
+
         ports:
-        - containerPort: 9080
-        volumeMounts:
-        - name: tmp
-          mountPath: /tmp
-      volumes:
-      - name: tmp
-        emptyDir: {}
+
+        - containerPort: 8080
+
+---
+
+##################################################################################################
+
+# Hello message services being called by main service
+
+##################################################################################################
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+
+  name: vets-service
+
+  labels:
+
+    app: vets-service
+
+spec:
+
+  ports:
+
+  - port: 8888
+
+    name: http
+
+  selector:
+
+    app: vets-service
+
+  type: ClusterIP
+
+---
+
+apiVersion: extensions/v1beta1
+
+kind: Deployment
+
+metadata:
+
+  name: vets-service-deployment-v1
+
+spec:
+
+  replicas: 1
+
+  template: # template for the pods
+
+    metadata:
+
+      labels:
+
+        app: vets-service
+
+        version: v1
+
+    spec:
+
+      containers:
+
+      - name: vets-service
+
+        image: saurabh2204/spring-petclinic-vets-service-istio:latest
+
+        imagePullPolicy: Always
+
+        ports:
+
+        - containerPort: 8888
+
 ---
