@@ -40,7 +40,7 @@
             	<version>1.4.9</version>
             	<configuration>
                 	<repository>${docker.image.prefix}/${project.artifactId}</repository>
-                	<tag>2.0</tag>
+                	<tag>latest</tag>
             	</configuration>
         	</plugin>
         	<plugin>
