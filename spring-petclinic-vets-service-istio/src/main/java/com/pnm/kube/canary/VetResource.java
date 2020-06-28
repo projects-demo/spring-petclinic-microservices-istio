@@ -40,6 +40,7 @@ class VetResource {
 
     @GetMapping
     public List<Vet> showResourcesVetList() {
+    	System.err.println("In Vets Service...");
         return vetRepository.findAll();
     }
     

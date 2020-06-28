@@ -211,3 +211,75 @@ spec:
         - containerPort: 9999
 
 ---
+
+##################################################################################################
+
+# Hello message services being called by main service api-service
+
+##################################################################################################
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+
+  name: api-service
+
+  labels:
+
+    app: api-service
+
+spec:
+
+  ports:
+
+  - port: 8081
+
+    name: http
+
+  selector:
+
+    app: api-service
+
+  type: ClusterIP
+
+---
+
+apiVersion: extensions/v1beta1
+
+kind: Deployment
+
+metadata:
+
+  name: api-service-deployment-v1
+
+spec:
+
+  replicas: 1
+
+  template: # template for the pods
+
+    metadata:
+
+      labels:
+
+        app: api-service
+
+        version: v1
+
+    spec:
+
+      containers:
+
+      - name: api-service
+
+        image: saurabh2204/spring-petclinic-api-gateway-istio:latest
+
+        imagePullPolicy: Always
+
+        ports:
+
+        - containerPort: 8081
+
+---

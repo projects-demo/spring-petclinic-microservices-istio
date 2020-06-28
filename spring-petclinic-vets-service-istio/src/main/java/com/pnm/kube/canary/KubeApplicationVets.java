@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class KubeApplication {
+public class KubeApplicationVets {
 	public static void main(String[] args) {
-		SpringApplication.run(KubeApplication.class, args);
+		SpringApplication.run(KubeApplicationVets.class, args);
 	}
 
 }

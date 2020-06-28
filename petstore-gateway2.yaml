@@ -34,7 +34,7 @@ kind: VirtualService
 
 metadata:
 
-  name: api-service
+  name: customers-service
 
 spec:
 
@@ -52,10 +52,10 @@ spec:
 
     - destination:
 
-        host: api-service
+        host: customers-service
 
         port:
 
-          number: 8081
+          number: 8080
 
 ---
