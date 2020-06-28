@@ -70,7 +70,7 @@ spec:
 
 ##################################################################################################
 
-# Hello message services being called by main service
+# Hello message services being called by main service vets-service
 
 ##################################################################################################
 
@@ -137,5 +137,77 @@ spec:
         ports:
 
         - containerPort: 8888
+
+---
+
+##################################################################################################
+
+# Hello message services being called by main service visits-service
+
+##################################################################################################
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+
+  name: visits-service
+
+  labels:
+
+    app: visits-service
+
+spec:
+
+  ports:
+
+  - port: 9999
+
+    name: http
+
+  selector:
+
+    app: visits-service
+
+  type: ClusterIP
+
+---
+
+apiVersion: extensions/v1beta1
+
+kind: Deployment
+
+metadata:
+
+  name: visits-service-deployment-v1
+
+spec:
+
+  replicas: 1
+
+  template: # template for the pods
+
+    metadata:
+
+      labels:
+
+        app: visits-service
+
+        version: v1
+
+    spec:
+
+      containers:
+
+      - name: visits-service
+
+        image: saurabh2204/spring-petclinic-visits-service-istio:latest
+
+        imagePullPolicy: Always
+
+        ports:
+
+        - containerPort: 9999
 
 ---
