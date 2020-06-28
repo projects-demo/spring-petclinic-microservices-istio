@@ -13,43 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.api.application;
+package com.pnm.kube.kube;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.samples.petclinic.api.dto.Visits;
+
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
-
-import static java.util.stream.Collectors.joining;
 
 /**
  * @author Maciej Szarlinski
  */
 @Component
 @RequiredArgsConstructor
-public class VisitsServiceClient {
+public class CustomersServiceClient {
 
-    // Could be changed for testing purpose
-    private String hostname = "http://visits-service/";
+	private final WebClient.Builder webClientBuilder;
+	private String hostname = "http://customers-service";
+	private String portName = "8080";
 
-    private final WebClient.Builder webClientBuilder;
+	public Mono<OwnerDetails> getOwner(final int ownerId) {
+		System.err.println("");
 
-    public Mono<Visits> getVisitsForPets(final List<Integer> petIds) {
-        return webClientBuilder.build()
-            .get()
-            .uri(hostname + "pets/visits?petId={petId}", joinIds(petIds))
-            .retrieve()
-            .bodyToMono(Visits.class);
-    }
-
-    private String joinIds(List<Integer> petIds) {
-        return petIds.stream().map(Object::toString).collect(joining(","));
-    }
-
-    void setHostname(String hostname) {
-        this.hostname = hostname;
-    }
+		return webClientBuilder.build().get().uri(hostname + ":" + portName + "/owners/{ownerId}", ownerId).retrieve()
+				.bodyToMono(OwnerDetails.class);
+	}
 }

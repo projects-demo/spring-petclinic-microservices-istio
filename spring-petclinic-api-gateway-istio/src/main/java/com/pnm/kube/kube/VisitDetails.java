@@ -13,20 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.api.dto;
+package com.pnm.kube.kube;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 
 /**
  * @author Maciej Szarlinski
  */
-@Value
-public class Visits {
+@Data
+@NoArgsConstructor
+public class VisitDetails {
 
-    private List<VisitDetails> items = new ArrayList<>();
+    private Integer id = null;
 
+    private Integer petId = null;
+
+    private String date = null;
+
+    private String description = null;
 }

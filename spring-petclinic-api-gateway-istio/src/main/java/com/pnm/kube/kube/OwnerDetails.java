@@ -13,23 +13,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.samples.petclinic.api.dto;
+package com.pnm.kube.kube;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * @author Maciej Szarlinski
  */
 @Data
-@NoArgsConstructor
-public class VisitDetails {
+public class OwnerDetails {
 
-    private Integer id = null;
+    private int id;
 
-    private Integer petId = null;
+    private String firstName;
 
-    private String date = null;
+    private String lastName;
 
-    private String description = null;
+    private String address;
+
+    private String city;
+
+    private String telephone;
+
+    private final List<PetDetails> pets = new ArrayList<>();
+
+    @JsonIgnore
+    public List<Integer> getPetIds() {
+        return pets.stream()
+            .map(PetDetails::getId)
+            .collect(toList());
+    }
 }
