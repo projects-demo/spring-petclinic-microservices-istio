@@ -12,7 +12,7 @@ public class HelloKube {
 	@Autowired
 	RestTemplate restTemplate;
 
-	@RequestMapping("/welcome")
+	@RequestMapping("/welcome-vets")
 	public String welcome() {
 		String message = "response from customer-service";
 		try {
@@ -55,4 +55,34 @@ public class HelloKube {
 	public RestTemplate rest() {
 		return new RestTemplate();
 	}
+
+
+	@RequestMapping("/welcome-visits")
+	public String welcomeVisits() {
+		String message = "response from visits-service";
+		try {
+			System.err.println("11Hello in welcome");
+			message = restTemplate.getForObject("http://visits-service:9999/hellovisit", String.class)
+					+ "visits-service response";
+			System.err.println("22Hello in welcome");
+
+		} catch (Exception e) {
+			try {
+
+				System.out.println("11 Exception " + e.getMessage());
+
+				message = restTemplate.getForObject("http://localhost:9999/hellovisit", String.class) + "localhost response";
+				System.out.println("32 Exception " + e.getMessage());
+
+			} catch (Exception e2) {
+				System.out.println("22 Exception " + e2.getMessage());
+			}
+		}
+		System.out.println("55 Exception " );
+
+		return message;
+	}
+
+
+
 }
