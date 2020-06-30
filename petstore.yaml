@@ -30,7 +30,7 @@ spec:
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 
 kind: Deployment
 
@@ -41,6 +41,11 @@ metadata:
 spec:
 
   replicas: 1
+
+  selector: 
+    matchLabels: 
+      
+      app: customers-service
 
   template: # template for the pods
 
@@ -102,7 +107,7 @@ spec:
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 
 kind: Deployment
 
@@ -113,6 +118,10 @@ metadata:
 spec:
 
   replicas: 1
+  selector: 
+    matchLabels: 
+       
+      app: vets-service
 
   template: # template for the pods
 
@@ -174,7 +183,7 @@ spec:
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 
 kind: Deployment
 
@@ -185,6 +194,11 @@ metadata:
 spec:
 
   replicas: 1
+  selector: 
+    matchLabels: 
+       
+      app: visits-service
+
 
   template: # template for the pods
 
@@ -246,7 +260,7 @@ spec:
 
 ---
 
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 
 kind: Deployment
 
@@ -257,6 +271,10 @@ metadata:
 spec:
 
   replicas: 1
+  selector: 
+    matchLabels: 
+       
+      app: api-service
 
   template: # template for the pods
 
