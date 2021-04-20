@@ -4,16 +4,23 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.springframework.samples.petclinic.api</groupId>
-    <artifactId>spring-petclinic-api-gateway</artifactId>
+    <artifactId>spring-petclinic-api-gateway-istio</artifactId>
     <packaging>jar</packaging>
     <description>Spring PetClinic API Gateway</description>
 
-    <parent>
+   <!--  <parent>
         <groupId>org.springframework.samples</groupId>
         <artifactId>spring-petclinic-microservices</artifactId>
         <version>2.3.1</version>
-    </parent>
+    </parent> -->
 
+<parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.3.1.RELEASE</version>
+    </parent>
+    
+    
     <properties>
         <webjars-bootstrap.version>3.3.7-1</webjars-bootstrap.version>
         <webjars-jquery-ui.version>1.11.4</webjars-jquery-ui.version>
@@ -21,7 +28,24 @@
         <webjars-angular.version>1.6.4</webjars-angular.version>
         <webjars-angular-ui-router.version>1.0.3</webjars-angular-ui-router.version>
         <wro4j.version>1.8.0</wro4j.version>
+        <docker.image.exposed.port>8081</docker.image.exposed.port>
+        <docker.image.dockerfile.dir>${basedir}/../docker</docker.image.dockerfile.dir>
+        
+           <java.version>1.8</java.version>
+        <assertj.version>3.11.1</assertj.version>
+
+        <spring-boot.version>2.3.1.RELEASE</spring-boot.version>
+        <spring-cloud.version>Hoxton.SR5</spring-cloud.version>
+
+        <maven-surefire-plugin.version>2.22.0</maven-surefire-plugin.version>
+
         <docker.image.prefix>saurabh2204</docker.image.prefix>
+        <docker.image.exposed.port>9090</docker.image.exposed.port>
+        <docker.image.dockerfile.dir>${basedir}</docker.image.dockerfile.dir>
+        <docker.image.dockerize.version>v0.6.1</docker.image.dockerize.version>
+        <docker.plugin.version>1.2.0</docker.plugin.version>
+          <dependencies.dependency.version>2.3.0.RELEASE</dependencies.dependency.version>
+        
         
     </properties>
 
@@ -52,18 +76,22 @@
      <!--    <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-sleuth-zipkin</artifactId>
-        </dependency> -->
-        <dependency>
+        </dependency>
+      -->   <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
+    <version>2.0.1</version>
+            
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
-     <!--    <dependency>
+         --><dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+    <version>2.0.1.RELEASE</version>
+            
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.cloud</groupId>
@@ -82,14 +110,16 @@
                     <artifactId>spring-cloud-netflix-hystrix</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency> -->
-        <dependency>
+        </dependency>
+  <!--       <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-sleuth</artifactId>
         </dependency>
-        <dependency>
+   -->      <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
+    <version>2.0.1.RELEASE</version>
+            
         </dependency>
 
         <!-- Third parties -->
@@ -101,14 +131,14 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        <dependency>
+       <!--  <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
         <dependency>
             <groupId>io.github.resilience4j</groupId>
             <artifactId>resilience4j-micrometer</artifactId>
-        </dependency>
+        </dependency> -->
 
         <!-- Webjars -->
         <dependency>
@@ -190,48 +220,9 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            
-            
-            <plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-			<plugin>
-            	<groupId>com.spotify</groupId>
-            	<artifactId>dockerfile-maven-plugin</artifactId>
-            	<version>1.4.9</version>
-            	<configuration>
-                	<repository>${docker.image.prefix}/${project.artifactId}</repository>
-                	<tag>latest</tag>
-            	</configuration>
-        	</plugin>
-        	<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-dependency-plugin</artifactId>
-			    <executions>
-			        <execution>
-			            <id>unpack</id>
-			            <phase>package</phase>
-			            <goals>
-			                <goal>unpack</goal>
-			            </goals>
-			            <configuration>
-			                <artifactItems>
-			                    <artifactItem>
-			                        <groupId>${project.groupId}</groupId>
-			                        <artifactId>${project.artifactId}</artifactId>
-			                        <version>${project.version}</version>
-			                    </artifactItem>
-			                </artifactItems>			                
-			            </configuration>
-			        </execution>
-			    </executions>
-			</plugin>
-            
-            
-            
-            
         </plugins>
     </build>
+
+  
 
 </project>
