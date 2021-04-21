@@ -3,10 +3,13 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.springframework.samples.petclinic.api</groupId>
-    <artifactId>spring-petclinic-api-gateway-istio</artifactId>
-    <packaging>jar</packaging>
-    <description>Spring PetClinic API Gateway</description>
+
+
+<groupId>com.pnm.kube</groupId>
+	<artifactId>spring-petclinic-api-gateway-istio</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>kube</name>
+	<description>Demo project for Spring Boot</description>
 
    <!--  <parent>
         <groupId>org.springframework.samples</groupId>
@@ -19,8 +22,8 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.3.1.RELEASE</version>
     </parent>
-    
-    
+
+
     <properties>
         <webjars-bootstrap.version>3.3.7-1</webjars-bootstrap.version>
         <webjars-jquery-ui.version>1.11.4</webjars-jquery-ui.version>
@@ -30,7 +33,7 @@
         <wro4j.version>1.8.0</wro4j.version>
         <docker.image.exposed.port>8081</docker.image.exposed.port>
         <docker.image.dockerfile.dir>${basedir}/../docker</docker.image.dockerfile.dir>
-        
+
            <java.version>1.8</java.version>
         <assertj.version>3.11.1</assertj.version>
 
@@ -45,8 +48,8 @@
         <docker.image.dockerize.version>v0.6.1</docker.image.dockerize.version>
         <docker.plugin.version>1.2.0</docker.plugin.version>
           <dependencies.dependency.version>2.3.0.RELEASE</dependencies.dependency.version>
-        
-        
+
+
     </properties>
 
     <dependencies>
@@ -81,7 +84,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-circuitbreaker-reactor-resilience4j</artifactId>
     <version>2.0.1</version>
-            
+
         </dependency>
         <!-- <dependency>
             <groupId>org.springframework.cloud</groupId>
@@ -91,7 +94,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
     <version>2.0.1.RELEASE</version>
-            
+
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.cloud</groupId>
@@ -119,7 +122,7 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-gateway</artifactId>
     <version>2.0.1.RELEASE</version>
-            
+
         </dependency>
 
         <!-- Third parties -->
@@ -220,6 +223,42 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
+<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+            	<groupId>com.spotify</groupId>
+            	<artifactId>dockerfile-maven-plugin</artifactId>
+            	<version>1.4.9</version>
+            	<configuration>
+                	<repository>${docker.image.prefix}/${project.artifactId}</repository>
+                	<tag>latest</tag>
+            	</configuration>
+        	</plugin>
+        	<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-dependency-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <id>unpack</id>
+			            <phase>package</phase>
+			            <goals>
+			                <goal>unpack</goal>
+			            </goals>
+			            <configuration>
+			                <artifactItems>
+			                    <artifactItem>
+			                        <groupId>${project.groupId}</groupId>
+			                        <artifactId>${project.artifactId}</artifactId>
+			                        <version>${project.version}</version>
+			                    </artifactItem>
+			                </artifactItems>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
         </plugins>
     </build>
 
