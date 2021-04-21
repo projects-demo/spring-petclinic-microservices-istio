@@ -65,7 +65,7 @@ spec:
 
         image: saurabh2204/spring-petclinic-customers-service-istio:latest
 
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
 
         ports:
 
@@ -141,7 +141,7 @@ spec:
 
         image: saurabh2204/spring-petclinic-vets-service-istio:latest
 
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
 
         ports:
 
@@ -218,7 +218,7 @@ spec:
 
         image: saurabh2204/spring-petclinic-visits-service-istio:latest
 
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
 
         ports:
 
@@ -294,7 +294,7 @@ spec:
 
         image: saurabh2204/spring-petclinic-api-gateway-istio:latest
 
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
 
         ports:
 
