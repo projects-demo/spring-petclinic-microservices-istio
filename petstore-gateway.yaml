@@ -34,7 +34,7 @@ kind: VirtualService
 
 metadata:
 
-  name: api-service
+  name: kube-canary-app
 
 spec:
 
@@ -52,10 +52,46 @@ spec:
 
     - destination:
 
-        host: api-service
+        host: kube-canary-app
 
         port:
 
-          number: 8081
+          number: 8080
+
+---
+
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: vets-service-route
+spec:
+  hosts:
+  - vets-service
+  http:
+  - route:
+    - destination:
+        host: vets-service
+        subset: v2
+      weight: 5
+    - destination:
+        host: vets-service
+        subset: v1
+      weight: 95
+
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: vets-service-destination
+  namespace: default
+spec:
+  host: vets-service # interpreted as reviews.foo.svc.cluster.local
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
 
 ---
