@@ -301,3 +301,80 @@ spec:
         - containerPort: 8081
 
 ---
+
+
+##################################################################################################
+
+# Hello message services being called by main service vets-service v2
+
+##################################################################################################
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+
+  name: vets-service-v2
+
+  labels:
+
+    app: vets-service
+
+spec:
+
+  ports:
+
+  - port: 8889
+
+    name: http
+
+  selector:
+
+    app: vets-service
+
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: vets-service-deployment-v2
+
+spec:
+
+  replicas: 1
+  selector: 
+    matchLabels: 
+       
+      app: vets-service
+
+  template: # template for the pods
+
+    metadata:
+
+      labels:
+
+        app: vets-service
+
+        version: v2
+
+    spec:
+
+      containers:
+
+      - name: vets-service-v2
+
+        image: saurabh2204/spring-petclinic-vets-service-istio-v2:latest
+
+        imagePullPolicy: IfNotPresent
+
+        ports:
+
+        - containerPort: 8889
+
+---
