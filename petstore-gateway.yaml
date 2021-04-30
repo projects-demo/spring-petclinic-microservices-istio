@@ -61,7 +61,7 @@ spec:
 ---
 
 apiVersion: networking.istio.io/v1alpha3
-kind: VirtualService
+kind: VirtualService                       #canary-release or traffic splitting example
 metadata:
   name: vets-service-route
 spec:
@@ -85,7 +85,7 @@ metadata:
   name: vets-service-destination
   namespace: default
 spec:
-  host: vets-service # interpreted as reviews.foo.svc.cluster.local
+  host: vets-service 
   subsets:
   - name: v1
     labels:
@@ -93,5 +93,26 @@ spec:
   - name: v2
     labels:
       version: v2
+
+---
+
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule                   #circuit -breaking example
+metadata:
+  name: visits-service-destination
+spec:
+  host: visits-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 1
+      http:
+        http1MaxPendingRequests: 1
+        maxRequestsPerConnection: 1
+    outlierDetection:
+      consecutive5xxErrors: 1
+      interval: 1s
+      baseEjectionTime: 3m
+      maxEjectionPercent: 100
 
 ---
