@@ -1,0 +1,74 @@
+##################################################################################################
+
+# Main  service receiving response from ingress
+
+##################################################################################################
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+
+  name: customers-service-v2
+
+  labels:
+
+    app: customers-service
+
+spec:
+
+  ports:
+
+  - port: 8086
+
+    name: http
+
+  selector:
+
+    app: customers-service
+
+---
+
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: customers-service-deployment-v2
+
+spec:
+
+  replicas: 1
+
+  selector: 
+    matchLabels: 
+      
+      app: customers-service
+
+  template: # template for the pods
+
+    metadata:
+
+      labels:
+
+        app: customers-service
+
+        version: v2
+
+    spec:
+
+      containers:
+
+      - name: customers-service-v2
+
+        image: saurabh2204/spring-petclinic-customers-service-istio:latest
+
+        imagePullPolicy: IfNotPresent
+
+        ports:
+
+        - containerPort: 8086
+
+---
