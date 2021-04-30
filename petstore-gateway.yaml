@@ -1,66 +1,37 @@
-apiVersion: networking.istio.io/v1alpha3
-
+apiVersion: networking.istio.io/v1beta1
 kind: Gateway
-
 metadata:
-
   name: istio-canary-gateway
-
 spec:
-
   selector:
-
     istio: ingressgateway # use istio default controller
-
   servers:
-
   - port:
-
       number: 80
-
       name: http
-
       protocol: HTTP
-
     hosts:
-
     - "*"
-
 ---
 
-apiVersion: networking.istio.io/v1alpha3
-
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
-
 metadata:
-
   name: kube-canary-app
-
 spec:
-
   hosts:
-
   - "*"
-
   gateways:
-
   - istio-canary-gateway
-
   http:
-
   - route:
-
     - destination:
-
-        host: kube-canary-app
-
+        host: api-service
         port:
-
-          number: 8080
-
+          number: 8081
 ---
 
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: VirtualService                       #canary-release or traffic splitting example
 metadata:
   name: vets-service-route
@@ -71,15 +42,15 @@ spec:
   - route:
     - destination:
         host: vets-service
-        subset: v2
+        subset: v1
       weight: 5
     - destination:
         host: vets-service
-        subset: v1
+        subset: v2
       weight: 95
 
 ---
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
   name: vets-service-destination
@@ -96,7 +67,7 @@ spec:
 
 ---
 
-apiVersion: networking.istio.io/v1alpha3
+apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule                   #circuit -breaking example
 metadata:
   name: visits-service-destination
