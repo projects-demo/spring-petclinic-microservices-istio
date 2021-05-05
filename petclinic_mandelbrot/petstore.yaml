@@ -1,0 +1,380 @@
+##################################################################################################
+
+# Main  service receiving response from ingress
+
+##################################################################################################
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+
+  name: customers-service
+
+  labels:
+
+    app: customers-service
+
+spec:
+
+  ports:
+
+  - port: 8080
+
+    name: http
+
+  selector:
+
+    app: customers-service
+
+---
+
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: customers-service-deployment-v1
+
+spec:
+
+  replicas: 1
+
+  selector: 
+    matchLabels: 
+      
+      app: customers-service
+
+  template: # template for the pods
+
+    metadata:
+
+      labels:
+
+        app: customers-service
+
+        version: v1
+
+    spec:
+
+      containers:
+
+      - name: customers-service
+
+        image: saurabh2204/spring-petclinic-customers-service-istio:latest
+
+        imagePullPolicy: IfNotPresent
+
+        ports:
+
+        - containerPort: 8080
+
+---
+
+##################################################################################################
+
+# Hello message services being called by main service vets-service
+
+##################################################################################################
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+
+  name: vets-service
+
+  labels:
+
+    app: vets-service
+
+spec:
+
+  ports:
+
+  - port: 8888
+
+    name: http
+
+  selector:
+
+    app: vets-service
+
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: vets-service-deployment-v1
+
+spec:
+
+  replicas: 1
+  selector: 
+    matchLabels: 
+       
+      app: vets-service
+
+  template: # template for the pods
+
+    metadata:
+
+      labels:
+
+        app: vets-service
+
+        version: v1
+
+    spec:
+
+      containers:
+
+      - name: vets-service
+
+        image: saurabh2204/spring-petclinic-vets-service-istio:latest
+
+        imagePullPolicy: IfNotPresent
+
+        ports:
+
+        - containerPort: 8888
+
+---
+
+##################################################################################################
+
+# Hello message services being called by main service visits-service
+
+##################################################################################################
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+
+  name: visits-service
+
+  labels:
+
+    app: visits-service
+
+spec:
+
+  ports:
+
+  - port: 9999
+
+    name: http
+
+  selector:
+
+    app: visits-service
+
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: visits-service-deployment-v1
+
+spec:
+
+  replicas: 1
+  selector: 
+    matchLabels: 
+       
+      app: visits-service
+
+
+  template: # template for the pods
+
+    metadata:
+
+      labels:
+
+        app: visits-service
+
+        version: v1
+
+    spec:
+
+      containers:
+
+      - name: visits-service
+
+        image: saurabh2204/spring-petclinic-visits-service-istio:latest
+
+        imagePullPolicy: IfNotPresent
+
+        ports:
+
+        - containerPort: 9999
+
+---
+
+##################################################################################################
+
+# Hello message services being called by main service api-service
+
+##################################################################################################
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+
+  name: api-service
+
+  labels:
+
+    app: api-service
+
+spec:
+
+  ports:
+
+  - port: 8081
+
+    name: http
+
+  selector:
+
+    app: api-service
+
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: api-service-deployment-v1
+
+spec:
+
+  replicas: 1
+  selector: 
+    matchLabels: 
+       
+      app: api-service
+
+  template: # template for the pods
+
+    metadata:
+
+      labels:
+
+        app: api-service
+
+        version: v1
+
+    spec:
+
+      containers:
+
+      - name: api-service
+
+        image: saurabh2204/spring-petclinic-api-gateway-istio:latest
+
+        imagePullPolicy: IfNotPresent
+
+        ports:
+
+        - containerPort: 8081
+
+---
+
+
+##################################################################################################
+
+# Hello message services being called by main service vets-service v2
+
+##################################################################################################
+
+apiVersion: v1
+
+kind: Service
+
+metadata:
+
+  name: vets-service-v2
+
+  labels:
+
+    app: vets-service
+
+spec:
+
+  ports:
+
+  - port: 8889
+
+    name: http
+
+  selector:
+
+    app: vets-service
+
+  type: ClusterIP
+
+---
+
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: vets-service-deployment-v2
+
+spec:
+
+  replicas: 1
+  selector: 
+    matchLabels: 
+       
+      app: vets-service
+
+  template: # template for the pods
+
+    metadata:
+
+      labels:
+
+        app: vets-service
+
+        version: v2
+
+    spec:
+
+      containers:
+
+      - name: vets-service-v2
+
+        image: saurabh2204/spring-petclinic-vets-service-istio-v2:latest
+
+        imagePullPolicy: IfNotPresent
+
+        ports:
+
+        - containerPort: 8889
+
+---

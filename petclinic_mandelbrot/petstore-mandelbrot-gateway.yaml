@@ -1,0 +1,109 @@
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: istio-canary-gateway-onprem
+spec:
+  selector:
+    istio: ingressgateway # use istio default controller
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "petclinic.vmw.gsk.hclcnlabs.com"
+    - "mandelbrot.vmw.gsk.hclcnlabs.com"
+---
+
+apiVersion: networking.istio.io/v1beta1   #Configure routes for traffic entering via above Gateway
+kind: VirtualService
+metadata:
+  name: mandelbrot-route
+spec:
+  hosts:
+  - "mandelbrot.vmw.gsk.hclcnlabs.com"
+  gateways:
+  - istio-canary-gateway-onprem
+  http:
+  - route:
+    - destination:
+        host: mandelbrot
+        port:
+          number: 8081
+---
+
+apiVersion: networking.istio.io/v1beta1   #Configure routes for traffic entering via above Gateway
+kind: VirtualService
+metadata:
+  name: petstore-route
+spec:
+  hosts:
+  - "petclinic.vmw.gsk.hclcnlabs.com"
+  gateways:
+  - istio-canary-gateway-onprem
+  http:
+  - route:
+    - destination:
+        host: api-service
+        port:
+          number: 8081
+---
+
+
+
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService                       #canary-release or traffic splitting example
+metadata:
+  name: vets-service-route
+spec:
+  hosts:
+  - vets-service
+  http:
+  - route:
+    - destination:
+        host: vets-service
+        subset: v1
+      weight: 5
+    - destination:
+        host: vets-service
+        subset: v2
+      weight: 95
+
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: vets-service-destination
+  namespace: default
+spec:
+  host: vets-service 
+  subsets:
+  - name: v1
+    labels:
+      version: v1
+  - name: v2
+    labels:
+      version: v2
+
+---
+
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule                   #circuit -breaking example
+metadata:
+  name: visits-service-destination
+spec:
+  host: visits-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 1
+      http:
+        http1MaxPendingRequests: 1
+        maxRequestsPerConnection: 1
+    outlierDetection:
+      consecutive5xxErrors: 1
+      interval: 1s
+      baseEjectionTime: 3m
+      maxEjectionPercent: 100
+
+---
