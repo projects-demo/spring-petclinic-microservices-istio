@@ -1,0 +1,9 @@
+# ssd-storageclass.yaml
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: faster
+provisioner: kubernetes.io/gce-pd
+volumeBindingMode: Immediate
+parameters:
+  type: pd-ssd
